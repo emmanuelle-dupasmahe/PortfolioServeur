@@ -12,7 +12,7 @@ try {
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
   // Requête pour récupérer tous les projets du plus récent au plus ancien
-  $stmt = $pdo->query("SELECT * FROM projets ORDER BY id DESC");
+  $stmt = $pdo->query("SELECT * FROM projets ORDER BY ordre ASC");
   $projets = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
   // Stoppe le script et affiche l'erreur en cas de problème de connexion
