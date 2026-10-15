@@ -1,3 +1,24 @@
+<?php
+// Identifiants de connexion locaux (Laragon)
+$host = 'localhost';
+$dbname = 'portfolio_db';
+$username = 'root';
+$password = '';
+
+try {
+  // Connexion avec PDO
+  $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+  // Activation des erreurs pour faciliter le débogage
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+  // Requête pour récupérer tous les projets du plus récent au plus ancien
+  $stmt = $pdo->query("SELECT * FROM projets ORDER BY id DESC");
+  $projets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+  // Stoppe le script et affiche l'erreur en cas de problème de connexion
+  die("Erreur de connexion à la base de données : " . $e->getMessage());
+}
+?>
 <!doctype html>
 <html lang="fr" data-theme="dark">
 
@@ -14,9 +35,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 
   <style type="text/tailwindcss">
     @theme {
@@ -281,116 +300,74 @@
     <nav class="navbar mx-auto max-w-6xl bg-transparent px-6 py-3 flex items-center justify-between">
       <div class="navbar-start">
         <a href="#projets" class="group flex items-center" aria-label="Accueil">
-          <img src="/logo_orque.png" alt="Logo Orque & Banquise"
-            class="size-16 rounded-full object-cover border-2 border-accent/40 transition-transform duration-300 group-hover:scale-105 shadow-md" />
+          <img src="/logo_orque.png" alt="Logo Orque & Banquise" class="size-16 rounded-full object-cover border-2 border-accent/40 transition-transform duration-300 group-hover:scale-105 shadow-md" />
         </a>
       </div>
       <div class="navbar-end gap-8 text-sm text-muted">
         <a href="#projets" class="u hover:text-fg transition-colors">Projets</a>
         <a href="#apropos" class="u hover:text-fg transition-colors max-sm:hidden">À propos</a>
-        <span class="flex items-center gap-2 tabular-nums"><span class="relative flex size-1.5"><span
-              class="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60"></span><span
-              class="relative inline-flex size-1.5 rounded-full bg-accent"></span></span><span id="clock">--:--</span>
-          Six-Fours</span>
+        <span class="flex items-center gap-2 tabular-nums"><span class="relative flex size-1.5"><span class="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60"></span><span class="relative inline-flex size-1.5 rounded-full bg-accent"></span></span><span id="clock">--:--</span> Six-Fours</span>
       </div>
     </nav>
   </header>
 
   <main id="top">
-    <!-- PROJETS EN PREMIER -->
+    <!-- PROJETS -->
     <section id="projets" class="mx-auto max-w-6xl scroll-mt-20 px-6 pb-24 pt-36">
       <div class="mb-14 flex items-end justify-between border-b border-line pb-6">
-        <h2 class="reveal text-4xl font-medium tracking-tight md:text-5xl">Mes <em
-            class="font-serif font-normal italic text-accent">projets</em> en ligne</h2>
-        <span class="reveal text-sm tabular-nums text-muted" style="--d:.1s">(03)</span>
+        <h2 class="reveal text-4xl font-medium tracking-tight md:text-5xl">Mes <em class="font-serif font-normal italic text-accent">projets</em> en ligne</h2>
+        <span class="reveal text-sm tabular-nums text-muted" style="--d:.1s">(<?= str_pad(count($projets), 2, '0', STR_PAD_LEFT) ?>)</span>
       </div>
 
       <div class="grid gap-x-8 gap-y-16 md:grid-cols-3">
 
-        <!-- 01 -->
-        <a href="http://vps-9a818ab2.vps.ovh.net/resrock/" target="_blank" rel="noopener" data-cursor="view"
-          data-path="/resrock/" class="project reveal flex h-full flex-col">
-          <div class="shot">
-            <div class="ph shimmer"><span class="font-serif text-2xl italic text-muted">Réservoir Rock</span></div>
-            <iframe title="Aperçu Réservoir Rock" tabindex="-1" aria-hidden="true"
-              data-src="http://vps-9a818ab2.vps.ovh.net/resrock/"></iframe>
-          </div>
-          <div class="title-row mt-6 flex items-center justify-between">
-            <h3 class="text-xl font-medium tracking-tight">Réservoir Rock</h3>
-            <svg class="size-5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <path d="M7 17L17 7M8 7h9v9" />
-            </svg>
-          </div>
-          <p class="mt-3 min-h-[4.5rem] text-sm leading-relaxed text-muted">Plateforme collaborative : concerts,
-            répétitions, repères audio et agenda synchronisé.</p>
-          <div class="mt-auto flex items-center justify-between border-t border-line pt-4 text-xs text-muted">
-            <span>React · Node.js · Espace admin</span>
-            <span class="flex items-center gap-2 tabular-nums text-muted"><span
-                class="size-1.5 rounded-full bg-accent"></span>2026</span>
-          </div>
-        </a>
+        <!-- Boucle PHP sur les projets -->
+        <?php foreach ($projets as $index => $projet): ?>
+          <a href="<?= htmlspecialchars($projet['lien_projet']) ?>" target="_blank" rel="noopener" data-cursor="view"
+            data-path="<?= htmlspecialchars(parse_url($projet['lien_projet'], PHP_URL_PATH) ?? '') ?>" class="project reveal flex h-full flex-col" style="--d:.<?= $index + 1 ?>s">
 
-        <!-- 02 -->
-        <a href="http://vps-9a818ab2.vps.ovh.net/ffss" target="_blank" rel="noopener" data-cursor="view"
-          data-path="/ffss" class="project reveal flex h-full flex-col" style="--d:.1s">
-          <div class="shot">
-            <div class="ph shimmer"><span class="font-serif text-2xl italic text-muted">ASSTSF</span></div>
-            <iframe title="Aperçu ASSTSF" tabindex="-1" aria-hidden="true"
-              data-src="http://vps-9a818ab2.vps.ovh.net/ffss"></iframe>
-          </div>
-          <div class="title-row mt-6 flex items-center justify-between">
-            <h3 class="text-xl font-medium tracking-tight">ASSTSF</h3>
-            <svg class="size-5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <path d="M7 17L17 7M8 7h9v9" />
-            </svg>
-          </div>
-          <p class="mt-3 min-h-[4.5rem] text-sm leading-relaxed text-muted">Association de secourisme affiliée FFSS :
-            formations PSE, SSA et demandes de DPS en ligne.</p>
-          <div class="mt-auto flex items-center justify-between border-t border-line pt-4 text-xs text-muted">
-            <span>Next.js · Auth.js · Prisma · Espace admin</span>
-            <span class="flex items-center gap-2 tabular-nums text-muted"><span
-                class="size-1.5 rounded-full bg-accent"></span>2026</span>
-          </div>
-        </a>
+            <div class="shot">
+              <div class="ph shimmer"><span class="font-serif text-2xl italic text-muted"><?= htmlspecialchars($projet['titre']) ?></span></div>
+              <iframe title="Aperçu <?= htmlspecialchars($projet['titre']) ?>" tabindex="-1" aria-hidden="true"
+                data-src="<?= htmlspecialchars($projet['lien_projet']) ?>"></iframe>
+            </div>
 
-        <!-- 03 -->
-        <a href="http://vps-9a818ab2.vps.ovh.net/farfadet" target="_blank" rel="noopener" data-cursor="view"
-          data-path="/farfadet" class="project reveal flex h-full flex-col" style="--d:.2s">
-          <div class="shot">
-            <div class="ph shimmer"><span class="font-serif text-2xl italic text-muted">Les Farfadets</span></div>
-            <iframe title="Aperçu Les Farfadets Vertigo" tabindex="-1" aria-hidden="true"
-              data-src="http://vps-9a818ab2.vps.ovh.net/farfadet"></iframe>
-          </div>
-          <div class="title-row mt-6 flex items-center justify-between">
-            <h3 class="text-xl font-medium tracking-tight">Les Farfadets Vertigo</h3>
-            <svg class="size-5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <path d="M7 17L17 7M8 7h9v9" />
-            </svg>
-          </div>
-          <p class="mt-3 min-h-[4.5rem] text-sm leading-relaxed text-muted">Association multisport et sport adapté :
-            activités, séjours enfants et inscriptions en ligne.</p>
-          <div class="mt-auto flex items-center justify-between border-t border-line pt-4 text-xs text-muted">
-            <span>Next.js · Espace admin</span>
-            <span class="flex items-center gap-2 tabular-nums text-muted"><span
-                class="size-1.5 rounded-full bg-accent"></span>2026</span>
-          </div>
-        </a>
+            <div class="title-row mt-6 flex items-center justify-between">
+              <h3 class="text-xl font-medium tracking-tight"><?= htmlspecialchars($projet['titre']) ?></h3>
+              <svg class="size-5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M7 17L17 7M8 7h9v9" />
+              </svg>
+            </div>
+
+            <p class="mt-3 min-h-[4.5rem] text-sm leading-relaxed text-muted">
+              <?= nl2br(htmlspecialchars($projet['description'])) ?>
+            </p>
+
+            <div class="mt-auto flex items-center justify-between border-t border-line pt-4 text-xs text-muted">
+              <span>
+                <?= htmlspecialchars($projet['technologie']) ?>
+                <?php if ($projet['espace_admin'] == 1): ?> · Espace admin<?php endif; ?>
+              </span>
+              <!-- Remplacement de l'année par défaut, tu pourrais aussi l'ajouter dans ta BDD si tu veux -->
+              <span class="flex items-center gap-2 tabular-nums text-muted"><span class="size-1.5 rounded-full bg-accent"></span>2026</span>
+            </div>
+          </a>
+        <?php endforeach; ?>
+
       </div>
     </section>
+
     <!-- STACK -->
     <section class="border-y border-line py-10" aria-label="Technologies">
       <div class="marquee overflow-hidden">
         <div class="marquee-track text-2xl font-light tracking-tight text-muted md:text-3xl items-center">
           <!-- Première série -->
           <div class="flex shrink-0 items-center gap-14 pr-14">
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nextjs-icon.svg"
-                alt="Next.js" class="size-6 object-contain" /><span>Next.js</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nextjs-icon.svg" alt="Next.js" class="size-6 object-contain" /><span>Next.js</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:react.svg" alt="React"
-                class="size-6" /><span>React</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:react.svg" alt="React" class="size-6" /><span>React</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:tailwindcss-icon.svg"
-                alt="Tailwind CSS" class="size-6" /><span>Tailwind CSS</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:tailwindcss-icon.svg" alt="Tailwind CSS" class="size-6" /><span>Tailwind CSS</span></div>
             <span class="text-accent">/</span>
             <div class="flex items-center gap-3">
               <svg class="size-6 shrink-0" viewBox="0 0 64 64" fill="none">
@@ -413,44 +390,33 @@
                   <path d="M32 0 V64" stroke="#000" stroke-opacity="0.08" stroke-width="2" />
                 </g>
                 <circle cx="32" cy="31" r="14" fill="#f1f5f9" />
-                <path
-                  d="M27.5 23 A5.5 5.5 0 1 0 33 28.5 L34.5 30 L34.5 32.5 L37 32.5 L37 35 L39.5 35 L39.5 37.5 L42.5 37.5 L42.5 33.5 L33 24 A5.5 5.5 0 0 0 27.5 23 Z"
-                  fill="#f59e0b" />
+                <path d="M27.5 23 A5.5 5.5 0 1 0 33 28.5 L34.5 30 L34.5 32.5 L37 32.5 L37 35 L39.5 35 L39.5 37.5 L42.5 37.5 L42.5 33.5 L33 24 A5.5 5.5 0 0 0 27.5 23 Z" fill="#f59e0b" />
                 <circle cx="26" cy="27" r="1.8" fill="#f1f5f9" />
               </svg>
               <span>Auth.js</span>
             </div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:prisma.svg" alt="Prisma"
-                class="size-6" /><span>Prisma</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:prisma.svg" alt="Prisma" class="size-6" /><span>Prisma</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nodejs-icon.svg"
-                alt="Node.js" class="size-6" /><span>Node.js</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nodejs-icon.svg" alt="Node.js" class="size-6" /><span>Node.js</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:mysql.svg" alt="MySQL"
-                class="size-6" /><span>MySQL</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:mysql.svg" alt="MySQL" class="size-6" /><span>MySQL</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:apache.svg" alt="Apache"
-                class="size-6" /><span>Apache</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:apache.svg" alt="Apache" class="size-6" /><span>Apache</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:linux-tux.svg" alt="Linux"
-                class="size-6" /><span>Linux</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:linux-tux.svg" alt="Linux" class="size-6" /><span>Linux</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:debian.svg" alt="Debian"
-                class="size-6" /><span>Debian</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:debian.svg" alt="Debian" class="size-6" /><span>Debian</span></div>
             <span class="text-accent">/</span>
           </div>
 
-          <!-- Deuxième série (copie exacte pour la boucle infinie fluide) -->
+          <!-- Deuxième série (copie exacte) -->
           <div class="flex shrink-0 items-center gap-14 pr-14" aria-hidden="true">
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nextjs-icon.svg"
-                alt="Next.js" class="size-6 object-contain" /><span>Next.js</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nextjs-icon.svg" alt="Next.js" class="size-6 object-contain" /><span>Next.js</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:react.svg" alt="React"
-                class="size-6" /><span>React</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:react.svg" alt="React" class="size-6" /><span>React</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:tailwindcss-icon.svg"
-                alt="Tailwind CSS" class="size-6" /><span>Tailwind CSS</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:tailwindcss-icon.svg" alt="Tailwind CSS" class="size-6" /><span>Tailwind CSS</span></div>
             <span class="text-accent">/</span>
             <div class="flex items-center gap-3">
               <svg class="size-6 shrink-0" viewBox="0 0 64 64" fill="none">
@@ -460,73 +426,53 @@
                   <path d="M32 0 V64" stroke="#000" stroke-opacity="0.08" stroke-width="2" />
                 </g>
                 <circle cx="32" cy="31" r="14" fill="#f1f5f9" />
-                <path
-                  d="M27.5 23 A5.5 5.5 0 1 0 33 28.5 L34.5 30 L34.5 32.5 L37 32.5 L37 35 L39.5 35 L39.5 37.5 L42.5 37.5 L42.5 33.5 L33 24 A5.5 5.5 0 0 0 27.5 23 Z"
-                  fill="#f59e0b" />
+                <path d="M27.5 23 A5.5 5.5 0 1 0 33 28.5 L34.5 30 L34.5 32.5 L37 32.5 L37 35 L39.5 35 L39.5 37.5 L42.5 37.5 L42.5 33.5 L33 24 A5.5 5.5 0 0 0 27.5 23 Z" fill="#f59e0b" />
                 <circle cx="26" cy="27" r="1.8" fill="#f1f5f9" />
               </svg>
               <span>Auth.js</span>
             </div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:prisma.svg" alt="Prisma"
-                class="size-6" /><span>Prisma</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:prisma.svg" alt="Prisma" class="size-6" /><span>Prisma</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nodejs-icon.svg"
-                alt="Node.js" class="size-6" /><span>Node.js</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nodejs-icon.svg" alt="Node.js" class="size-6" /><span>Node.js</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:mysql.svg" alt="MySQL"
-                class="size-6" /><span>MySQL</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:mysql.svg" alt="MySQL" class="size-6" /><span>MySQL</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:apache.svg" alt="Apache"
-                class="size-6" /><span>Apache</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:apache.svg" alt="Apache" class="size-6" /><span>Apache</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:linux-tux.svg" alt="Linux"
-                class="size-6" /><span>Linux</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:linux-tux.svg" alt="Linux" class="size-6" /><span>Linux</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:debian.svg" alt="Debian"
-                class="size-6" /><span>Debian</span></div>
+            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:debian.svg" alt="Debian" class="size-6" /><span>Debian</span></div>
             <span class="text-accent">/</span>
           </div>
         </div>
       </div>
     </section>
+
     <!-- À PROPOS -->
     <section id="apropos" class="mx-auto max-w-6xl scroll-mt-20 px-6 py-28">
       <div class="grid gap-12 md:grid-cols-12 items-center">
-
         <!-- Colonne Image -->
         <div class="reveal md:col-span-5" style="--d:.1s">
-          <div
-            class="relative aspect-square overflow-hidden rounded-[2rem] bg-[#070d1d] border border-line p-2 shadow-2xl">
-            <!-- Remplace le src par le chemin de ton image d'orque -->
-            <img src="/logo_orque.png" alt="Orque et Banquise"
-              class="w-full h-full object-cover rounded-[1.5rem] opacity-90 transition-transform duration-700 hover:scale-105" />
-            <div
-              class="absolute inset-0 rounded-[2rem] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)] pointer-events-none">
-            </div>
+          <div class="relative aspect-square overflow-hidden rounded-[2rem] bg-[#070d1d] border border-line p-2 shadow-2xl">
+            <img src="/logo_orque.png" alt="Orque et Banquise" class="w-full h-full object-cover rounded-[1.5rem] opacity-90 transition-transform duration-700 hover:scale-105" />
+            <div class="absolute inset-0 rounded-[2rem] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)] pointer-events-none"></div>
           </div>
         </div>
 
         <!-- Colonne Texte -->
         <div class="md:col-span-7 md:pl-10">
           <p class="reveal text-sm font-semibold tracking-widest text-accent uppercase mb-6">À propos</p>
-
           <h2 class="reveal text-3xl font-light leading-tight tracking-tight md:text-5xl md:leading-[1.15]">
             L'agilité en surface,<br> la <em class="font-serif italic text-accent">puissance</em> en profondeur.
           </h2>
-
           <p class="reveal mt-8 text-lg text-muted leading-relaxed" style="--d:.1s">
-            À l'image de l'orque, je conçois des projets web fluides et rapides, soutenus par une infrastructure robuste
-            et invisible en profondeur.
+            À l'image de l'orque, je conçois des projets web fluides et rapides, soutenus par une infrastructure robuste et invisible en profondeur.
           </p>
-
           <p class="reveal mt-6 text-muted leading-relaxed" style="--d:.2s">
-            J'accompagne les associations et vos projets indépendants en offrant une véritable liberté numérique :
-            serveurs VPS Linux, configuration sur mesure (reverse proxy Apache, bases de données) et totale maîtrise des
-            données.
+            J'accompagne les associations et vos projets indépendants en offrant une véritable liberté numérique : serveurs VPS Linux, configuration sur mesure (reverse proxy Apache, bases de données) et totale maîtrise des données.
           </p>
         </div>
-
       </div>
     </section>
   </main>
@@ -549,35 +495,52 @@
 
     /* Horloge */
     const clock = document.getElementById('clock');
-    const fmt = new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' });
+    const fmt = new Intl.DateTimeFormat('fr-FR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Europe/Paris'
+    });
     const setClock = () => clock.textContent = fmt.format(new Date());
-    setClock(); setInterval(setClock, 10000);
+    setClock();
+    setInterval(setClock, 10000);
 
     /* Apparition au scroll */
     const io = new IntersectionObserver(entries => entries.forEach(e => {
       if (!e.isIntersecting) return;
       e.target.classList.add('in');
       io.unobserve(e.target);
-    }), { threshold: .2 });
+    }), {
+      threshold: .2
+    });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
     /* Barre de progression + nav */
-    const bar = document.getElementById('progress'), nav = document.getElementById('nav');
+    const bar = document.getElementById('progress'),
+      nav = document.getElementById('nav');
     addEventListener('scroll', () => {
       const h = document.documentElement.scrollHeight - innerHeight;
       bar.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`;
       nav.classList.toggle('border-line', scrollY > 40);
       nav.classList.toggle('backdrop-blur-md', scrollY > 40);
       nav.classList.toggle('bg-[#0b1329]/80', scrollY > 40);
-    }, { passive: true });
+    }, {
+      passive: true
+    });
 
     /* Curseur personnalisé */
     if (fine) {
       const cur = document.querySelector('.cursor');
-      let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y;
-      addEventListener('pointermove', e => { x = e.clientX; y = e.clientY; });
+      let x = innerWidth / 2,
+        y = innerHeight / 2,
+        cx = x,
+        cy = y;
+      addEventListener('pointermove', e => {
+        x = e.clientX;
+        y = e.clientY;
+      });
       (function loop() {
-        cx += (x - cx) * (reduce ? 1 : .2); cy += (y - cy) * (reduce ? 1 : .2);
+        cx += (x - cx) * (reduce ? 1 : .2);
+        cy += (y - cy) * (reduce ? 1 : .2);
         cur.style.transform = `translate(${cx}px, ${cy}px)`;
         requestAnimationFrame(loop);
       })();
@@ -594,15 +557,24 @@
       const iframe = card.querySelector('iframe');
       const load = () => {
         if (iframe.src) return;
-        iframe.addEventListener('load', () => iframe.classList.add('loaded'), { once: true });
+        iframe.addEventListener('load', () => iframe.classList.add('loaded'), {
+          once: true
+        });
         iframe.src = iframe.dataset.src;
       };
       const whenVisible = () => new IntersectionObserver((en, o) => {
-        if (en[0].isIntersecting) { load(); o.disconnect(); }
-      }, { rootMargin: '300px' }).observe(card);
+        if (en[0].isIntersecting) {
+          load();
+          o.disconnect();
+        }
+      }, {
+        rootMargin: '300px'
+      }).observe(card);
 
       if (!sameHost) return whenVisible();
-      fetch(card.dataset.path, { cache: 'no-store' }).then(r => {
+      fetch(card.dataset.path, {
+        cache: 'no-store'
+      }).then(r => {
         if (r.ok) whenVisible();
       }).catch(whenVisible);
     });
