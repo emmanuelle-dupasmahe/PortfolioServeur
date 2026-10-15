@@ -1,0 +1,11 @@
+# Fichiers de configuration sensibles (mots de passe BDD)
+config.php
+.env
+
+# Dossiers des éditeurs de code (VS Code, PhpStorm, etc.)
+.vscode/
+.idea/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
