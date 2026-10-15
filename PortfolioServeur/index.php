@@ -1,9 +1,5 @@
 <?php
-// Identifiants de connexion locaux (Laragon)
-$host = 'localhost';
-$dbname = 'portfolio_db';
-$username = 'root';
-$password = '';
+require_once 'config.php';
 
 try {
   // Connexion avec PDO

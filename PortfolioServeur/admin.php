@@ -1,12 +1,7 @@
 <?php
 session_start();
 
-// --- CONFIGURATION ---
-$mot_de_passe_admin = "orque2026";
-$host = 'localhost';
-$dbname = 'portfolio_db';
-$username = 'root';
-$password = '';
+require_once 'config.php';
 
 // --- GESTION DE LA CONNEXION ---
 if (isset($_POST['login_password'])) {
