@@ -12,7 +12,10 @@ try {
   $projets = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
   // Stoppe le script et affiche l'erreur en cas de problème de connexion
-  die("Erreur de connexion à la base de données : " . $e->getMessage());
+  // Le détail de l'erreur va dans les logs du serveur, pas à l'écran des visiteurs
+  error_log("Erreur de connexion à la base de données : " . $e->getMessage());
+  http_response_code(503);
+  die("Le site est momentanément indisponible, merci de réessayer plus tard.");
 }
 ?>
 <!doctype html>
@@ -21,8 +24,28 @@ try {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mes Projets — Accueil</title>
-  <meta name="description" content="Sélection de nos projets : Reservoir Rock, ASSTSF, Les Farfadets Vertigo." />
+  <title>Ma Nux — Création de sites web et serveurs VPS à Six-Fours</title>
+  <meta name="description" content="Sites web rapides et serveurs VPS Linux sur mesure (Apache, bases de données) pour les associations et les projets indépendants, depuis Six-Fours-les-Plages." />
+  <link rel="canonical" href="https://ma-nux.fr/" />
+
+  <!-- Aperçu lors d'un partage (LinkedIn, Facebook, messageries...) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ma-nux.fr/" />
+  <meta property="og:site_name" content="Ma Nux" />
+  <meta property="og:title" content="Ma Nux — Création de sites web et serveurs VPS" />
+  <meta property="og:description" content="Sites web rapides et serveurs VPS Linux sur mesure pour les associations et les projets indépendants." />
+  <meta property="og:image" content="https://ma-nux.fr/icon-512.png" />
+  <meta property="og:locale" content="fr_FR" />
+  <!-- Manifest et icônes standards -->
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Optimisation iOS (App-like) -->
+  <meta name="apple-mobile-web-app-title" content="Ma Nux">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0b1329" />
 
   <!-- FlyonUI + Tailwind v4 (CDN) -->
@@ -296,7 +319,7 @@ try {
     <nav class="navbar mx-auto max-w-6xl bg-transparent px-6 py-3 flex items-center justify-between">
       <div class="navbar-start">
         <a href="#projets" class="group flex items-center" aria-label="Accueil">
-          <img src="/logo_orque.png" alt="Logo Orque & Banquise" class="size-16 rounded-full object-cover border-2 border-accent/40 transition-transform duration-300 group-hover:scale-105 shadow-md" />
+          <img src="logo_orque.png" alt="Logo Orque & Banquise" class="size-16 rounded-full object-cover border-2 border-accent/40 transition-transform duration-300 group-hover:scale-105 shadow-md" />
         </a>
       </div>
       <div class="navbar-end gap-8 text-sm text-muted">
@@ -311,7 +334,7 @@ try {
     <!-- PROJETS -->
     <section id="projets" class="mx-auto max-w-6xl scroll-mt-20 px-6 pb-24 pt-36">
       <div class="mb-14 flex items-end justify-between border-b border-line pb-6">
-        <h2 class="reveal text-4xl font-medium tracking-tight md:text-5xl">Mes <em class="font-serif font-normal italic text-accent">projets</em> en ligne</h2>
+        <h1 class="reveal text-4xl font-medium tracking-tight md:text-5xl">Mes <em class="font-serif font-normal italic text-accent">projets</em> en ligne</h1>
         <span class="reveal text-sm tabular-nums text-muted" style="--d:.1s">(<?= str_pad(count($projets), 2, '0', STR_PAD_LEFT) ?>)</span>
       </div>
 
@@ -359,11 +382,11 @@ try {
         <div class="marquee-track text-2xl font-light tracking-tight text-muted md:text-3xl items-center">
           <!-- Première série -->
           <div class="flex shrink-0 items-center gap-14 pr-14">
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nextjs-icon.svg" alt="Next.js" class="size-6 object-contain" /><span>Next.js</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/nextjs-icon.svg" alt="Next.js" class="size-6 object-contain" /><span>Next.js</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:react.svg" alt="React" class="size-6" /><span>React</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/react.svg" alt="React" class="size-6" /><span>React</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:tailwindcss-icon.svg" alt="Tailwind CSS" class="size-6" /><span>Tailwind CSS</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/tailwindcss-icon.svg" alt="Tailwind CSS" class="size-6" /><span>Tailwind CSS</span></div>
             <span class="text-accent">/</span>
             <div class="flex items-center gap-3">
               <svg class="size-6 shrink-0" viewBox="0 0 64 64" fill="none">
@@ -392,27 +415,27 @@ try {
               <span>Auth.js</span>
             </div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:prisma.svg" alt="Prisma" class="size-6" /><span>Prisma</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/prisma.svg" alt="Prisma" class="size-6" /><span>Prisma</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nodejs-icon.svg" alt="Node.js" class="size-6" /><span>Node.js</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/nodejs-icon.svg" alt="Node.js" class="size-6" /><span>Node.js</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:mysql.svg" alt="MySQL" class="size-6" /><span>MySQL</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/mysql.svg" alt="MySQL" class="size-6" /><span>MySQL</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:apache.svg" alt="Apache" class="size-6" /><span>Apache</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/apache.svg" alt="Apache" class="size-6" /><span>Apache</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:linux-tux.svg" alt="Linux" class="size-6" /><span>Linux</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/linux-tux.svg" alt="Linux" class="size-6" /><span>Linux</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:debian.svg" alt="Debian" class="size-6" /><span>Debian</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/debian.svg" alt="Debian" class="size-6" /><span>Debian</span></div>
             <span class="text-accent">/</span>
           </div>
 
           <!-- Deuxième série (copie exacte) -->
           <div class="flex shrink-0 items-center gap-14 pr-14" aria-hidden="true">
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nextjs-icon.svg" alt="Next.js" class="size-6 object-contain" /><span>Next.js</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/nextjs-icon.svg" alt="Next.js" class="size-6 object-contain" /><span>Next.js</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:react.svg" alt="React" class="size-6" /><span>React</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/react.svg" alt="React" class="size-6" /><span>React</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:tailwindcss-icon.svg" alt="Tailwind CSS" class="size-6" /><span>Tailwind CSS</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/tailwindcss-icon.svg" alt="Tailwind CSS" class="size-6" /><span>Tailwind CSS</span></div>
             <span class="text-accent">/</span>
             <div class="flex items-center gap-3">
               <svg class="size-6 shrink-0" viewBox="0 0 64 64" fill="none">
@@ -428,17 +451,17 @@ try {
               <span>Auth.js</span>
             </div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:prisma.svg" alt="Prisma" class="size-6" /><span>Prisma</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/prisma.svg" alt="Prisma" class="size-6" /><span>Prisma</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:nodejs-icon.svg" alt="Node.js" class="size-6" /><span>Node.js</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/nodejs-icon.svg" alt="Node.js" class="size-6" /><span>Node.js</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:mysql.svg" alt="MySQL" class="size-6" /><span>MySQL</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/mysql.svg" alt="MySQL" class="size-6" /><span>MySQL</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:apache.svg" alt="Apache" class="size-6" /><span>Apache</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/apache.svg" alt="Apache" class="size-6" /><span>Apache</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:linux-tux.svg" alt="Linux" class="size-6" /><span>Linux</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/linux-tux.svg" alt="Linux" class="size-6" /><span>Linux</span></div>
             <span class="text-accent">/</span>
-            <div class="flex items-center gap-3"><img src="https://api.iconify.design/logos:debian.svg" alt="Debian" class="size-6" /><span>Debian</span></div>
+            <div class="flex items-center gap-3"><img src="assets/tech-logos/debian.svg" alt="Debian" class="size-6" /><span>Debian</span></div>
             <span class="text-accent">/</span>
           </div>
         </div>
@@ -451,7 +474,7 @@ try {
         <!-- Colonne Image -->
         <div class="reveal md:col-span-5" style="--d:.1s">
           <div class="relative aspect-square overflow-hidden rounded-[2rem] bg-[#070d1d] border border-line p-2 shadow-2xl">
-            <img src="/logo_orque.png" alt="Orque et Banquise" class="w-full h-full object-cover rounded-[1.5rem] opacity-90 transition-transform duration-700 hover:scale-105" />
+            <img src="logo_orque.png" alt="Orque et Banquise" class="w-full h-full object-cover rounded-[1.5rem] opacity-90 transition-transform duration-700 hover:scale-105" />
             <div class="absolute inset-0 rounded-[2rem] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)] pointer-events-none"></div>
           </div>
         </div>
@@ -548,7 +571,6 @@ try {
     }
 
     /* Aperçus live des projets (iframe) */
-    const sameHost = location.hostname === 'vps-9a818ab2.vps.ovh.net';
     document.querySelectorAll('.project').forEach(card => {
       const iframe = card.querySelector('iframe');
       const load = () => {
@@ -567,12 +589,7 @@ try {
         rootMargin: '300px'
       }).observe(card);
 
-      if (!sameHost) return whenVisible();
-      fetch(card.dataset.path, {
-        cache: 'no-store'
-      }).then(r => {
-        if (r.ok) whenVisible();
-      }).catch(whenVisible);
+      whenVisible();
     });
   </script>
 </body>

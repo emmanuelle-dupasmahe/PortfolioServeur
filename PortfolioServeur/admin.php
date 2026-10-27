@@ -3,6 +3,9 @@ session_start();
 
 require_once 'config.php';
 
+// Nom de ce fichier (admin.php en local, orque.php sur le serveur)
+$page_admin = basename($_SERVER['PHP_SELF']);
+
 // --- GESTION DE LA CONNEXION ---
 if (isset($_POST['login_password'])) {
     if ($_POST['login_password'] === $mot_de_passe_admin) {
@@ -14,7 +17,7 @@ if (isset($_POST['login_password'])) {
 
 if (isset($_GET['logout'])) {
     session_destroy();
-    header("Location: admin.php");
+    header("Location: " . $page_admin);
     exit;
 }
 
@@ -26,6 +29,7 @@ if (!isset($_SESSION['admin_connecte'])) {
 
     <head>
         <meta charset="UTF-8">
+        <meta name="robots" content="noindex, nofollow">
         <title>Connexion - Back-office</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
@@ -98,6 +102,7 @@ $projets = $pdo->query("SELECT * FROM projets ORDER BY ordre ASC")->fetchAll(PDO
 
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
     <title>Administration des projets</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -119,7 +124,7 @@ $projets = $pdo->query("SELECT * FROM projets ORDER BY ordre ASC")->fetchAll(PDO
         <?php endif; ?>
 
         <!-- FORMULAIRE -->
-        <form method="POST" action="admin.php" class="bg-[#111c38] p-6 rounded-lg shadow-lg border border-[#1e293b] mb-12">
+        <form method="POST" action="<?= htmlspecialchars($page_admin) ?>" class="bg-[#111c38] p-6 rounded-lg shadow-lg border border-[#1e293b] mb-12">
 
             <?php if ($projet_a_modifier): ?>
                 <h2 class="text-xl text-[#38bdf8] mb-4">Modifier le projet : <?= htmlspecialchars($projet_a_modifier['titre']) ?></h2>
@@ -166,7 +171,7 @@ $projets = $pdo->query("SELECT * FROM projets ORDER BY ordre ASC")->fetchAll(PDO
                     <?= $projet_a_modifier ? 'Mettre à jour le projet' : 'Enregistrer le projet' ?>
                 </button>
                 <?php if ($projet_a_modifier): ?>
-                    <a href="admin.php" class="text-gray-400 hover:text-white transition-colors">Annuler la modification</a>
+                    <a href="<?= htmlspecialchars($page_admin) ?>" class="text-gray-400 hover:text-white transition-colors">Annuler la modification</a>
                 <?php endif; ?>
             </div>
         </form>
@@ -187,7 +192,7 @@ $projets = $pdo->query("SELECT * FROM projets ORDER BY ordre ASC")->fetchAll(PDO
                     </div>
                     <div class="flex items-center gap-4">
                         <a href="?edit=<?= $p['id'] ?>" class="text-[#38bdf8] hover:underline text-sm font-medium">Modifier</a>
-                        <form method="POST" action="admin.php" onsubmit="return confirm('Es-tu sûr(e) de vouloir supprimer définitivement ce projet ?');" class="inline">
+                        <form method="POST" action="<?= htmlspecialchars($page_admin) ?>" onsubmit="return confirm('Es-tu sûr(e) de vouloir supprimer définitivement ce projet ?');" class="inline">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id" value="<?= $p['id'] ?>">
                             <button type="submit" class="text-red-400 hover:text-red-300 hover:underline text-sm font-medium">Supprimer</button>
