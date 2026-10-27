@@ -1,0 +1,7 @@
+# Désactiver le listage des fichiers du dossier (empêche de voir le contenu du dossier)
+Options -Indexes
+
+# Interdire l'accès direct au fichier de configuration
+<Files "config.php">
+    Require all denied
+</Files>
