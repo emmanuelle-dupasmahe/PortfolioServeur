@@ -24,16 +24,16 @@ try {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ma Nux — Création de sites web et serveurs VPS à Six-Fours</title>
-  <meta name="description" content="Sites web rapides et serveurs VPS Linux sur mesure (Apache, bases de données) pour les associations et les projets indépendants, depuis Six-Fours-les-Plages." />
+  <title>Ma Nux — Portfolio de projets web</title>
+  <meta name="description" content="Découvrez mes réalisations : sites d'associations et projets indépendants développés en React, Next.js, Node.js et PHP." />
   <link rel="canonical" href="https://ma-nux.fr/" />
 
   <!-- Aperçu lors d'un partage (LinkedIn, Facebook, messageries...) -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ma-nux.fr/" />
   <meta property="og:site_name" content="Ma Nux" />
-  <meta property="og:title" content="Ma Nux — Création de sites web et serveurs VPS" />
-  <meta property="og:description" content="Sites web rapides et serveurs VPS Linux sur mesure pour les associations et les projets indépendants." />
+  <meta property="og:title" content="Ma Nux — Portfolio de projets web" />
+  <meta property="og:description" content="Découvrez mes réalisations : sites d'associations et projets indépendants développés en React, Next.js, Node.js et PHP." />
   <meta property="og:image" content="https://ma-nux.fr/icon-512.png" />
   <meta property="og:locale" content="fr_FR" />
   <!-- Manifest et icônes standards -->
