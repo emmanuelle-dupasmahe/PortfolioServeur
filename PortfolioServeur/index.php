@@ -489,7 +489,7 @@ try {
             À l'image de l'orque, je conçois des projets web fluides et rapides, soutenus par une infrastructure robuste et invisible en profondeur.
           </p>
           <p class="reveal mt-6 text-muted leading-relaxed" style="--d:.2s">
-            J'accompagne les associations et vos projets indépendants en offrant une véritable liberté numérique : serveurs VPS Linux, configuration sur mesure (reverse proxy Apache, bases de données) et totale maîtrise des données.
+            J'accompagne les associations et vos projets indépendants en offrant une véritable liberté numérique : serveur VPS Linux, configuration sur mesure (reverse proxy Apache, bases de données) et totale maîtrise des données.
           </p>
         </div>
       </div>
