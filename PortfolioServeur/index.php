@@ -367,7 +367,7 @@ try {
                 <?= htmlspecialchars($projet['technologie']) ?>
                 <?php if ($projet['espace_admin'] == 1): ?> · Espace admin<?php endif; ?>
               </span>
-              <!-- Remplacement de l'année par défaut, tu pourrais aussi l'ajouter dans ta BDD si tu veux -->
+              <!-- Remplacement de l'année par défaut -->
               <span class="flex items-center gap-2 tabular-nums text-muted"><span class="size-1.5 rounded-full bg-accent"></span>2026</span>
             </div>
           </a>
@@ -429,7 +429,7 @@ try {
             <span class="text-accent">/</span>
           </div>
 
-          <!-- Deuxième série (copie exacte) -->
+          <!-- Deuxième série  -->
           <div class="flex shrink-0 items-center gap-14 pr-14" aria-hidden="true">
             <div class="flex items-center gap-3"><img src="assets/tech-logos/nextjs-icon.svg" alt="Next.js" class="size-6 object-contain" /><span>Next.js</span></div>
             <span class="text-accent">/</span>
