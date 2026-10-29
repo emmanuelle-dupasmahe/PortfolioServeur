@@ -36,6 +36,39 @@ try {
   <meta property="og:description" content="Découvrez mes réalisations : sites d'associations et projets indépendants développés en React, Next.js, Node.js et PHP." />
   <meta property="og:image" content="https://ma-nux.fr/icon-512.png" />
   <meta property="og:locale" content="fr_FR" />
+
+  <!-- Données structurées : aident Google et les IA à identifier Ma Nux -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://ma-nux.fr/#organisation",
+        "name": "Ma Nux",
+        "alternateName": ["Manux", "ma-nux.fr"],
+        "url": "https://ma-nux.fr/",
+        "logo": "https://ma-nux.fr/icon-512.png",
+        "description": "Développement de sites web pour les associations et les projets indépendants : React, Next.js, Node.js et PHP.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Six-Fours-les-Plages",
+          "addressCountry": "FR"
+        },
+        "knowsAbout": ["Développement web", "React", "Next.js", "Node.js", "PHP", "MySQL", "Linux", "Apache"],
+        "sameAs": ["https://github.com/emmanuelle-dupasmahe"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://ma-nux.fr/#site",
+        "name": "Ma Nux",
+        "url": "https://ma-nux.fr/",
+        "inLanguage": "fr-FR",
+        "publisher": { "@id": "https://ma-nux.fr/#organisation" }
+      }
+    ]
+  }
+  </script>
   <!-- Manifest et icônes standards -->
   <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -319,7 +352,7 @@ try {
     <nav class="navbar mx-auto max-w-6xl bg-transparent px-6 py-3 flex items-center justify-between">
       <div class="navbar-start">
         <a href="#projets" class="group flex items-center" aria-label="Accueil">
-          <img src="logo_orque.png" alt="Logo Orque & Banquise" class="size-16 rounded-full object-cover border-2 border-accent/40 transition-transform duration-300 group-hover:scale-105 shadow-md" />
+          <img src="logo_orque.png" alt="Ma Nux, accueil" class="size-16 rounded-full object-cover border-2 border-accent/40 transition-transform duration-300 group-hover:scale-105 shadow-md" />
         </a>
       </div>
       <div class="navbar-end gap-8 text-sm text-muted">
@@ -474,7 +507,7 @@ try {
         <!-- Colonne Image -->
         <div class="reveal md:col-span-5" style="--d:.1s">
           <div class="relative aspect-square overflow-hidden rounded-[2rem] bg-[#070d1d] border border-line p-2 shadow-2xl">
-            <img src="logo_orque.png" alt="Orque et Banquise" class="w-full h-full object-cover rounded-[1.5rem] opacity-90 transition-transform duration-700 hover:scale-105" />
+            <img src="logo_orque.png" alt="Logo Ma Nux : une orque sur la banquise" class="w-full h-full object-cover rounded-[1.5rem] opacity-90 transition-transform duration-700 hover:scale-105" />
             <div class="absolute inset-0 rounded-[2rem] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)] pointer-events-none"></div>
           </div>
         </div>
@@ -486,7 +519,7 @@ try {
             L'agilité en surface,<br> la <em class="font-serif italic text-accent">puissance</em> en profondeur.
           </h2>
           <p class="reveal mt-8 text-lg text-muted leading-relaxed" style="--d:.1s">
-            À l'image de l'orque, je conçois des projets web fluides et rapides, soutenus par une infrastructure robuste et invisible en profondeur.
+            Avec Ma Nux, et à l'image de l'orque, je conçois des projets web fluides et rapides, soutenus par une infrastructure robuste et invisible en profondeur.
           </p>
           <p class="reveal mt-6 text-muted leading-relaxed" style="--d:.2s">
             J'accompagne les associations et vos projets indépendants en offrant une véritable liberté numérique : serveur VPS Linux, configuration sur mesure (reverse proxy Apache, bases de données) et totale maîtrise des données.
@@ -498,7 +531,7 @@ try {
 
   <footer class="border-t border-line">
     <div class="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-12 md:flex-row md:items-end md:justify-between">
-      <p class="reveal font-serif text-2xl italic text-muted">Portail des projets</p>
+      <p class="reveal font-serif text-2xl italic text-muted">Ma Nux — Portail des projets</p>
       <div class="flex items-center gap-6 text-sm text-muted">
         <span>© <span id="year"></span></span>
         <a href="#projets" class="u magnetic hover:text-fg transition-colors">Haut de page ↑</a>
