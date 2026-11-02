@@ -522,7 +522,7 @@ try {
             Avec Ma-nux, et à l'image de l'orque, je conçois des projets web fluides et rapides, soutenus par une infrastructure robuste et invisible en profondeur.
           </p>
           <p class="reveal mt-6 text-muted leading-relaxed" style="--d:.2s">
-            J'accompagne les associations et les projets indépendants avec des sites pensés pour leurs besoins : inscriptions en ligne, espaces membres, agendas partagés. Vos outils et vos données restent entre vos mains.
+            J'accompagne les associations et les projets indépendants avec des sites pensés pour leurs besoins. Chaque site dispose de son CMS sur mesure : les équipes publient et mettent à jour leurs contenus en toute autonomie, et gardent la main sur leurs données.
           </p>
         </div>
       </div>
