@@ -5,3 +5,8 @@ Options -Indexes
 <Files "config.php">
     Require all denied
 </Files>
+
+# Interdire l'accès aux fichiers du dépôt Git qui ne font pas partie du site
+<FilesMatch "^(README\.md|\.gitignore)$">
+    Require all denied
+</FilesMatch>
